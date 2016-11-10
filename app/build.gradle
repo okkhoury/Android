@@ -4,7 +4,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
     defaultConfig {
-        applicationId "dubstepboard.okkhoury.com.edmpad"
+        applicationId "com.okkhoury.dubstepboard"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 2
