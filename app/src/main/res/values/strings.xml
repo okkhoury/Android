@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">EDMpad</string>
+    <string name="app_name">EDM pad</string>
     <string name="action_settings">Settings</string>
+    <string name="preset1">Gradient</string>
+    <string name="preset2">Ethereal</string>
+    <string name="preset3">AutoPilot</string>
+    <string name="preset4">Roses</string>
+    <string name="preset5">Dreamers</string>
+
+    <string name="looper1">LOOP1</string>
+    <string name="looper2">LOOP2</string>
+    <string name="looper3">LOOP3</string>
+
 </resources>
+

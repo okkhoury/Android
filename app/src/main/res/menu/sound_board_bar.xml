@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/loop1"
+        android:title="@string/looper1"
+        android:showAsAction="always" />
+
+    <item android:id="@+id/loop2"
+        android:title="@string/looper2"
+        android:showAsAction="always" />
+
+    <item android:id="@+id/loop3"
+        android:title="@string/looper3"
+        android:showAsAction="always" />
+
+    <item android:id="@+id/preset_4"
+        android:title="@string/preset4"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/preset_5"
+        android:title="@string/preset5"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/preset_1"
+        android:title="@string/preset1"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/preset_2"
+        android:title="@string/preset2"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/preset_3"
+        android:title="@string/preset3"
+        android:showAsAction="never" />
+
+</menu>

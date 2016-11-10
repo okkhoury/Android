@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/black"
+    >
+
+    <TableRow android:layout_weight="1"
+        android:id="@+id/soundRow1"
+        >
+        <Button
+            android:id="@+id/soundButton1"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton2"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton3"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+    </TableRow>
+
+
+    <TableRow android:layout_weight="1"
+        android:id="@+id/soundRow2"
+        >
+        <Button
+            android:id="@+id/soundButton4"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton5"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton6"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+    </TableRow>
+
+
+    <TableRow android:layout_weight="1"
+        android:id="@+id/soundRow3"
+        >
+        <Button
+            android:id="@+id/soundButton7"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton8"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton9"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+    </TableRow>
+
+
+
+    <TableRow android:layout_weight="1"
+        android:id="@+id/soundRow4"
+        >
+        <Button
+            android:id="@+id/soundButton10"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton11"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/soundButton12"
+            style="@style/EDMButton1"
+            android:layout_weight="1"
+            />
+    </TableRow>
+
+</TableLayout>
+

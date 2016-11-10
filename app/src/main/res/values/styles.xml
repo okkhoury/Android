@@ -17,4 +17,40 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="EDMButton1" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@drawable/button1_shadowed</item>
+    </style>
+
+    <style name="EDMButton2" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@drawable/button2_shadowed</item>
+    </style>
+
+    <style name="EDMButton3" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@drawable/button3_shadowed</item>
+    </style>
+
+    <style name="EDMButton4" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@drawable/button4_shadowed</item>
+    </style>
+
+    <style name="EDMButton5" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@drawable/button5_shadowed</item>
+    </style>
+
 </resources>
+
