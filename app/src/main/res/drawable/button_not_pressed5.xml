@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:id="@+id/button_pressed4">
+
+    <corners android:radius="3dp" />
+
+    <gradient
+        android:angle="90"
+        android:endColor="#76ee00"
+        android:startColor="#98f5ff" />
+
+    <stroke
+        android:width="3dp"
+        android:color="#65655B" />
+
+</shape>
