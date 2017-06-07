@@ -1,5 +1,8 @@
 package dubstepboard.okkhoury.com.edmpad;
 
+import android.app.ActionBar;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -64,6 +67,9 @@ public class EDMActivity extends FragmentActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
         return super.onOptionsItemSelected(item);
     }

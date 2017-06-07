@@ -12,6 +12,6 @@ android:id="@+id/button_pressed">
 
 <stroke
     android:width="3dp"
-    android:color="#65655B" />
+    android:color="#000000" />
 
 </shape>

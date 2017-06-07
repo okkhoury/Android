@@ -1,5 +1,7 @@
 package dubstepboard.okkhoury.com.edmpad;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
@@ -144,6 +146,9 @@ public class EDMFragment1 extends Fragment {
             getActivity().getActionBar().setHomeButtonEnabled(false);
         }
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+
+        // Set the action bar to black
+        getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
     }
 
