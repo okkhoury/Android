@@ -24,15 +24,15 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class EDMFragment4 extends Fragment {
 
     // Set up the sound pools
-    final SoundPool spNormal = new SoundPool(12, AudioManager.STREAM_MUSIC, 0);
+    final SoundPool spNormal = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 //    final SoundPool spHold1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 //    final SoundPool spHold2 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 //    final SoundPool spHold3 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
     // Set up the looping sound pools
-    private SoundPool spLoop1 = new SoundPool(12, AudioManager.STREAM_MUSIC, 0);
-    private SoundPool spLoop2 = new SoundPool(12, AudioManager.STREAM_MUSIC, 0);
-    private SoundPool spLoop3 = new SoundPool(12, AudioManager.STREAM_MUSIC, 0);
+    private SoundPool spLoop1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    private SoundPool spLoop2 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    private SoundPool spLoop3 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
     //Boolean variables to tell if a loop is being recorded
     private boolean loop1IsRecording;

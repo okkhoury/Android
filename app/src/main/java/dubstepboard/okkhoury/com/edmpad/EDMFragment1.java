@@ -236,8 +236,7 @@ public class EDMFragment1 extends Fragment {
                     loop1IsRecording = false;
                     //loopTask = new loopingTask();
                     //loopTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-                    Log.d("OWEN", loop1SoundQueue.toString());
-                    Log.d("OWEN", loop1PauseQueue.toString());
+
                     runLoop1();
                     return true;
                 } else if (item.getTitle().equals("END1")) {
