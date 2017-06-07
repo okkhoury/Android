@@ -252,8 +252,6 @@ public class EDMFragment2 extends Fragment {
                     loop2PauseQueue.add(System.currentTimeMillis() - loop2EndOfLastSound);
                     loop2PauseQueue.remove();
 
-                    Log.d("Pauses", loop1PauseQueue.toString());
-                    Log.d("sounds", loop1SoundQueue.toString());
                     loop2IsRecording = false;
                     loopTask2 = new loopingTask2();
                     loopTask2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
@@ -276,8 +274,8 @@ public class EDMFragment2 extends Fragment {
                 } else if (item.getTitle().equals("STOP3")) {
                     item.setTitle("END3");
 
-                    loop1PauseQueue.add(System.currentTimeMillis() - loop1EndOfLastSound);
-                    loop1PauseQueue.remove();
+                    loop3PauseQueue.add(System.currentTimeMillis() - loop3EndOfLastSound);
+                    loop3PauseQueue.remove();
 
                     loop3IsRecording = false;
                     loopTask3 = new loopingTask3();
@@ -365,6 +363,10 @@ public class EDMFragment2 extends Fragment {
         loopTask.cancel(true);
         loopTask2.cancel(true);
         loopTask3.cancel(true);
+
+        loop1IsRecording = false;
+        loop2IsRecording = false;
+        loop3IsRecording = false;
 
         spLoop1.release();
         spLoop2.release();
