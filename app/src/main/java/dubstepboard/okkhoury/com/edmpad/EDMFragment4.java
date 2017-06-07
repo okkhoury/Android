@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -54,10 +55,15 @@ public class EDMFragment4 extends Fragment {
     private long loop2EndOfLastSound;
     private long loop3EndOfLastSound;
 
-    //Async tasks for playing loops in the background
-    private loopingTask loopTask = new loopingTask();
-    private loopingTask2 loopTask2 = new loopingTask2();
-    private loopingTask3 loopTask3 = new loopingTask3();
+    // Keep track of which loops are currently being played
+    private boolean loop1IsOn = false;
+    private boolean loop2IsOn = false;
+    private boolean loop3IsOn = false;
+
+//    //Async tasks for playing loops in the background
+//    private loopingTask loopTask = new loopingTask();
+//    private loopingTask2 loopTask2 = new loopingTask2();
+//    private loopingTask3 loopTask3 = new loopingTask3();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -199,17 +205,18 @@ public class EDMFragment4 extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        loopTask.cancel(true);
         loop1SoundQueue.clear();
         loop1PauseQueue.clear();
 
-        loopTask2.cancel(true);
         loop2SoundQueue.clear();
         loop2PauseQueue.clear();
 
-        loopTask3.cancel(true);
         loop3SoundQueue.clear();
         loop3PauseQueue.clear();
+
+        loop1IsOn = false;
+        loop2IsOn = false;
+        loop3IsOn = false;
     }
 
     // Handle all of the actions for button clicks on the action bar
@@ -231,19 +238,24 @@ public class EDMFragment4 extends Fragment {
                     loop1PauseQueue.add(System.currentTimeMillis() - loop1EndOfLastSound);
                     loop1PauseQueue.remove();
 
-                    Log.d("Pauses", loop1PauseQueue.toString());
-                    Log.d("sounds", loop1SoundQueue.toString());
+                    loop1IsOn = true;
+
                     loop1IsRecording = false;
-                    loopTask = new loopingTask();
-                    loopTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+                    //loopTask = new loopingTask();
+                    //loopTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+
+                    runLoop1();
                     return true;
                 } else if (item.getTitle().equals("END1")) {
                     item.setTitle("LOOP1");
+
+                    loop1IsOn = false;
                     loop1SoundQueue.clear();
                     loop1PauseQueue.clear();
-                    loopTask.cancel(true);
+                    //loopTask.cancel(true);
                     return true;
                 }
+                break;
 
             case R.id.loop2:
                 if (item.getTitle().equals("LOOP2")) {
@@ -254,22 +266,27 @@ public class EDMFragment4 extends Fragment {
                 } else if (item.getTitle().equals("STOP2")) {
                     item.setTitle("END2");
 
+                    loop2IsOn = true;
+
                     loop2PauseQueue.add(System.currentTimeMillis() - loop2EndOfLastSound);
                     loop2PauseQueue.remove();
 
-                    Log.d("Pauses", loop1PauseQueue.toString());
-                    Log.d("sounds", loop1SoundQueue.toString());
                     loop2IsRecording = false;
-                    loopTask2 = new loopingTask2();
-                    loopTask2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+
+                    runLoop2();
+
                     return true;
                 } else if (item.getTitle().equals("END2")) {
                     item.setTitle("LOOP2");
+
+                    loop2IsOn = false;
+
                     loop2SoundQueue.clear();
                     loop2PauseQueue.clear();
-                    loopTask2.cancel(true);
+
                     return true;
                 }
+                break;
 
             case R.id.loop3:
                 if (item.getTitle().equals("LOOP3")) {
@@ -280,20 +297,27 @@ public class EDMFragment4 extends Fragment {
                 } else if (item.getTitle().equals("STOP3")) {
                     item.setTitle("END3");
 
-                    loop1PauseQueue.add(System.currentTimeMillis() - loop1EndOfLastSound);
-                    loop1PauseQueue.remove();
+                    loop3IsOn = true;
+
+                    loop3PauseQueue.add(System.currentTimeMillis() - loop3EndOfLastSound);
+                    loop3PauseQueue.remove();
 
                     loop3IsRecording = false;
-                    loopTask3 = new loopingTask3();
-                    loopTask3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+
+                    runLoop3();
+
                     return true;
                 } else if (item.getTitle().equals("END3")) {
                     item.setTitle("LOOP3");
+
+                    loop3IsOn = false;
+
                     loop3SoundQueue.clear();
                     loop3PauseQueue.clear();
-                    loopTask3.cancel(true);
+
                     return true;
                 }
+                break;
 
             case R.id.preset_1:
                 releaseEverything();
@@ -322,6 +346,7 @@ public class EDMFragment4 extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
 
+        return true;
     }
 
     public void moveToNewPreset (String preset) {
@@ -364,10 +389,9 @@ public class EDMFragment4 extends Fragment {
 //        spHold2.release();
 //        spHold3.release();
 
-        // Destroy background threads when moving to new preset
-        loopTask.cancel(true);
-        loopTask2.cancel(true);
-        loopTask3.cancel(true);
+        loop1IsOn = false;
+        loop2IsOn = false;
+        loop3IsOn = false;
 
         spLoop1.release();
         spLoop2.release();
@@ -416,14 +440,15 @@ public class EDMFragment4 extends Fragment {
         });
     }
 
-    // These three AsyncTasks handle the loops in the background
-    class loopingTask extends AsyncTask<Object, Object, Void> {
-        @Override
-        protected Void doInBackground(Object... arg0) {
-            if (loop1SoundQueue.size() != 0) {
-                while (!this.isCancelled()) {
 
-                    // Play the next sound in the queue
+    public void runLoop1 () {
+        final Handler handler1 = new Handler();
+
+        handler1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (loop1IsOn && !loop1SoundQueue.isEmpty()) {
                     int soundID = loop1SoundQueue.remove();
                     loop1SoundQueue.add(soundID);
                     spLoop1.play(soundID, (float).9, (float).9, 0, 0, 1);
@@ -432,24 +457,25 @@ public class EDMFragment4 extends Fragment {
                     Long pause = loop1PauseQueue.remove();
                     loop1PauseQueue.add(pause);
 
-                    try {
-                        Thread.sleep(pause);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
+                    handler1.postDelayed(this, pause);
+                } else {
+                    handler1.removeCallbacks(this);
+                    loop1PauseQueue.clear();
+                    loop1SoundQueue.clear();
                 }
+
             }
-            return null;
-        }
+        }, 0);
     }
 
-    class loopingTask2 extends AsyncTask<Object, Object, Void> {
-        @Override
-        protected Void doInBackground(Object... arg0) {
-            if (loop2SoundQueue.size() != 0) {
-                while (!this.isCancelled()) {
+    public void runLoop2 () {
+        final Handler handler2 = new Handler();
 
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (loop2IsOn && !loop2SoundQueue.isEmpty()) {
                     int soundID = loop2SoundQueue.remove();
                     loop2SoundQueue.add(soundID);
                     spLoop2.play(soundID, (float).9, (float).9, 0, 0, 1);
@@ -457,23 +483,25 @@ public class EDMFragment4 extends Fragment {
                     // Pop the pause off the top and move it to the back of the queue
                     Long pause = loop2PauseQueue.remove();
                     loop2PauseQueue.add(pause);
-                    try {
-                        Thread.sleep(pause);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
+                    handler2.postDelayed(this, pause);
+                } else {
+                    handler2.removeCallbacks(this);
+                    loop2SoundQueue.clear();
+                    loop2PauseQueue.clear();
                 }
             }
-            return null;
-        }
+        }, 0);
     }
 
-    class loopingTask3 extends AsyncTask<Object, Object, Void> {
-        @Override
-        protected Void doInBackground(Object... arg0) {
-            if (loop3SoundQueue.size() != 0) {
-                while (!this.isCancelled()) {
+    public void runLoop3 () {
+        final Handler handler3 = new Handler();
 
+        handler3.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (loop3IsOn && !loop3SoundQueue.isEmpty()) {
                     int soundID = loop3SoundQueue.remove();
                     loop3SoundQueue.add(soundID);
                     spLoop3.play(soundID, (float).9, (float).9, 0, 0, 1);
@@ -481,16 +509,93 @@ public class EDMFragment4 extends Fragment {
                     // Pop the pause off the top and move it to the back of the queue
                     Long pause = loop3PauseQueue.remove();
                     loop3PauseQueue.add(pause);
-                    try {
-                        Thread.sleep(pause);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
+                    handler3.postDelayed(this, pause);
+                } else {
+                    handler3.removeCallbacks(this);
+                    loop3SoundQueue.clear();
+                    loop3PauseQueue.clear();
                 }
             }
-            return null;
-        }
+        }, 0);
     }
+
+
+//    // These three AsyncTasks handle the loops in the background
+//    class loopingTask extends AsyncTask<Object, Object, Void> {
+//        @Override
+//        protected Void doInBackground(Object... arg0) {
+//            if (loop1SoundQueue.size() != 0) {
+//                while (!this.isCancelled()) {
+//
+//                    // Play the next sound in the queue
+//                    int soundID = loop1SoundQueue.remove();
+//                    loop1SoundQueue.add(soundID);
+//                    spLoop1.play(soundID, (float).9, (float).9, 0, 0, 1);
+//
+//                    // Pop the pause off the top and move it to the back of the queue
+//                    Long pause = loop1PauseQueue.remove();
+//                    loop1PauseQueue.add(pause);
+//
+//                    try {
+//                        Thread.sleep(pause);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//            return null;
+//        }
+//    }
+//
+//    class loopingTask2 extends AsyncTask<Object, Object, Void> {
+//        @Override
+//        protected Void doInBackground(Object... arg0) {
+//            if (loop2SoundQueue.size() != 0) {
+//                while (!this.isCancelled()) {
+//
+//                    int soundID = loop2SoundQueue.remove();
+//                    loop2SoundQueue.add(soundID);
+//                    spLoop2.play(soundID, (float).9, (float).9, 0, 0, 1);
+//
+//                    // Pop the pause off the top and move it to the back of the queue
+//                    Long pause = loop2PauseQueue.remove();
+//                    loop2PauseQueue.add(pause);
+//                    try {
+//                        Thread.sleep(pause);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//            return null;
+//        }
+//    }
+//
+//    class loopingTask3 extends AsyncTask<Object, Object, Void> {
+//        @Override
+//        protected Void doInBackground(Object... arg0) {
+//            if (loop3SoundQueue.size() != 0) {
+//                while (!this.isCancelled()) {
+//
+//                    int soundID = loop3SoundQueue.remove();
+//                    loop3SoundQueue.add(soundID);
+//                    spLoop3.play(soundID, (float).9, (float).9, 0, 0, 1);
+//
+//                    // Pop the pause off the top and move it to the back of the queue
+//                    Long pause = loop3PauseQueue.remove();
+//                    loop3PauseQueue.add(pause);
+//                    try {
+//                        Thread.sleep(pause);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//            return null;
+//        }
+//    }
 
 }

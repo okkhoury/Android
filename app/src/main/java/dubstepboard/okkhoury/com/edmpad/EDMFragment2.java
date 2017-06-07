@@ -210,6 +210,10 @@ public class EDMFragment2 extends Fragment {
        // loopTask3.cancel(true);
         loop3SoundQueue.clear();
         loop3PauseQueue.clear();
+
+        loop1IsOn = false;
+        loop2IsOn = false;
+        loop3IsOn = false;
     }
 
     // Handle all of the actions for button clicks on the action bar
