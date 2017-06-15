@@ -63,11 +63,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
     private static long loop2EndOfLastSound;
     private static long loop3EndOfLastSound;
 
-//    //Async tasks for playing loops in the background
-//    private loopingTask loopTask = new loopingTask();
-//    private loopingTask2 loopTask2 = new loopingTask2();
-//    private loopingTask3 loopTask3 = new loopingTask3();
-
     // Keep track of which loops are currently being played
     private boolean loop1IsOn = false;
     private boolean loop2IsOn = false;
@@ -93,7 +88,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        //spinner.setOnItemSelectedListener(this);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
@@ -118,7 +113,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop1.setText("Stop");
                     loop1EndOfLastSound = System.currentTimeMillis();
                     loop1IsRecording = true;
-                    //return true;
                 } else if (loop1.getText().equals("Stop")) {
                     loop1.setText("End");
                     // Add the time from last sound pressed to clicking stop
@@ -128,21 +122,15 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop1PauseQueue.remove();
 
                     loop1IsOn = true;
-
                     loop1IsRecording = false;
-                    //loopTask = new loopingTask();
-                    //loopTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
 
                     runLoop1();
-                    //return true;
                 } else if (loop1.getText().equals("End")) {
                     loop1.setText("Loop 1");
 
                     loop1IsOn = false;
                     loop1SoundQueue.clear();
                     loop1PauseQueue.clear();
-                    //loopTask.cancel(true);
-                    //return true;
                 }
             }
         });
@@ -154,29 +142,21 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop2.setText("Stop");
                     loop2EndOfLastSound = System.currentTimeMillis();
                     loop2IsRecording = true;
-                    //return true;
                 } else if (loop2.getText().equals("Stop")) {
                     loop2.setText("End");
 
                     loop2IsOn = true;
-
                     loop2PauseQueue.add(System.currentTimeMillis() - loop2EndOfLastSound);
                     loop2PauseQueue.remove();
-
                     loop2IsRecording = false;
 
                     runLoop2();
-
-                    //return true;
                 } else if (loop2.getText().equals("End")) {
                     loop2.setText("Loop 2");
 
                     loop2IsOn = false;
-
                     loop2SoundQueue.clear();
                     loop2PauseQueue.clear();
-
-                    //return true;
                 }
             }
         });
@@ -188,44 +168,24 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop3.setText("Stop");
                     loop3EndOfLastSound = System.currentTimeMillis();
                     loop3IsRecording = true;
-                    //return true;
                 } else if (loop3.getText().equals("Stop")) {
                     loop3.setText("End");
 
                     loop3IsOn = true;
-
                     loop3PauseQueue.add(System.currentTimeMillis() - loop3EndOfLastSound);
                     loop3PauseQueue.remove();
-
                     loop3IsRecording = false;
 
                     runLoop3();
-
-                   // return true;
                 } else if (loop3.getText().equals("End")) {
                     loop3.setText("Loop 3");
 
                     loop3IsOn = false;
-
                     loop3SoundQueue.clear();
                     loop3PauseQueue.clear();
-
-                    //return true;
                 }
             }
         });
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     @Override
@@ -272,13 +232,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         // Another interface callback
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.sound_board_bar, menu);
-//        return true;
-//    }
-
     // Fill in the sound and pause for the respective queues
     public static void handleLoopingQueues(final int resID) {
         if (loop1IsRecording) {
@@ -323,24 +276,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         loop2IsOn = false;
         loop3IsOn = false;
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        ActionBar bar = getActionBar();
-//        bar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public void releaseEverything() {
 //        spNormal.release();
