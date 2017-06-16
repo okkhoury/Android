@@ -1,28 +1,14 @@
 package dubstepboard.okkhoury.com.edmpad;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class EDMFragment3 extends Fragment {
 
@@ -34,7 +20,7 @@ public class EDMFragment3 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -44,7 +30,6 @@ public class EDMFragment3 extends Fragment {
         // set up view and inflate the xml layout
         View v;   // = new View(getActivity());
         v = inflater.inflate(R.layout.fragment3_edm, parent, false);
-
 
         // Set up the buttons
         final Button soundButton1 = (Button) v.findViewById(R.id.soundButton1);
@@ -75,7 +60,6 @@ public class EDMFragment3 extends Fragment {
         final int sound11ID = spNormal.load(getActivity(), R.raw.ap11, 1);
         final int sound12ID = spNormal.load(getActivity(), R.raw.ap12, 1);
 
-
         // wire up the top button, which you hold down to play
         setUpHoldDownButton(soundButton1, sound1ID, spHold1);
         setUpHoldDownButton(soundButton2, sound2ID, spHold2);
@@ -94,22 +78,6 @@ public class EDMFragment3 extends Fragment {
         setUpRegularButton(soundButton12, sound12ID, spNormal, R.raw.ap12);
 
         return v;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.sound_board_bar, menu);
-
-        // Set it so that the home button can't be used as a button
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getActivity().getActionBar().setHomeButtonEnabled(false);
-        }
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
-
-        // Set the action bar to black
-        getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-
     }
 
     public void setUpRegularButton(final Button soundButton, final int sound, final SoundPool sp, final int resID) {
@@ -135,40 +103,6 @@ public class EDMFragment3 extends Fragment {
         });
     }
 
-    public void moveToNewPreset (String preset) {
-        if (preset.equals("preset1")) {
-            Fragment fragment = new EDMFragment1();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset2")) {
-            Fragment fragment = new EDMFragment2();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset3")) {
-            Fragment fragment = new EDMFragment3();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset4")) {
-            Fragment fragment = new EDMFragment4();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset5")) {
-            Fragment fragment = new EDMFragment5();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        }
-    }
-
     public void setUpHoldDownButton(final Button soundButton, final int sound, final SoundPool sp) {
         soundButton.setSoundEffectsEnabled(false);
         soundButton.setOnTouchListener(new View.OnTouchListener() {
@@ -188,17 +122,6 @@ public class EDMFragment3 extends Fragment {
                     break;
                 }
                 return true;
-            }
-        });
-    }
-
-    // Adds on load listeners to the looping sound pools
-    public void setUpLoopSP(SoundPool spLoop, final Queue<Integer> soundQueue) {
-        spLoop.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                soundQueue.add(sampleId);
-                //Log.d("hi owen", "Sound added");
             }
         });
     }

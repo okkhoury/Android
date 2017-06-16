@@ -1,26 +1,16 @@
 package dubstepboard.okkhoury.com.edmpad;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -88,7 +78,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        //spinner.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(this);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
@@ -115,6 +105,8 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop1IsRecording = true;
                 } else if (loop1.getText().equals("Stop")) {
                     loop1.setText("End");
+                    Log.d("OWEN OWEN", loop1SoundQueue.toString());
+                    Log.d("OWEN OWEN", loop1PauseQueue.toString());
                     // Add the time from last sound pressed to clicking stop
                     // Delete the first element from the queue.
                     // Don't want to include time from first press of loop to first sound press
@@ -198,7 +190,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         switch (pos) {
             case 0:
                 releaseEverything();
-                fragment = new EDMFragment1(); // Ethereal
+                fragment = new EDMFragment1(); // Gradient
                 break;
             case 1:
                 releaseEverything();
@@ -206,15 +198,15 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                 break;
             case 2:
                 releaseEverything();
-                fragment = new EDMFragment3(); // Ethereal
+                fragment = new EDMFragment3(); // AutoPilot
                 break;
             case 3:
                 releaseEverything();
-                fragment = new EDMFragment4(); // Ethereal
+                fragment = new EDMFragment4(); // Dreamers
                 break;
             case 4:
                 releaseEverything();
-                fragment = new EDMFragment5(); // Ethereal
+                fragment = new EDMFragment5(); // Roses
                 break;
             default:
                 releaseEverything();
@@ -260,33 +252,29 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
     @Override
     public void onPause() {
         super.onPause();
-        //loopTask.cancel(true);
+
         loop1SoundQueue.clear();
         loop1PauseQueue.clear();
+        loop1IsOn = false;
 
-        //loopTask2.cancel(true);
         loop2SoundQueue.clear();
         loop2PauseQueue.clear();
+        loop2IsOn = false;
 
-        //loopTask3.cancel(true);
         loop3SoundQueue.clear();
         loop3PauseQueue.clear();
-
-        loop1IsOn = false;
-        loop2IsOn = false;
         loop3IsOn = false;
     }
 
     public void releaseEverything() {
-//        spNormal.release();
-//        spHold1.release();
-//        spHold2.release();
-//        spHold3.release();
 
-//        // Destroy background threads when moving to new preset
-//        loopTask.cancel(true);
-//        loopTask2.cancel(true);
-//        loopTask3.cancel(true);
+        loop1.getText().equals("Loop 1");
+        loop2.getText().equals("Loop 2");
+        loop3.getText().equals("Loop 3");
+
+        loop1.setText("Loop 1");
+        loop2.setText("Loop 2");
+        loop3.setText("Loop 3");
 
         loop1IsRecording = false;
         loop2IsRecording = false;
@@ -296,10 +284,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         loop2IsOn = false;
         loop3IsOn = false;
 
-        spLoop1.release();
-        spLoop2.release();
-        spLoop3.release();
-
         loop1SoundQueue.clear();
         loop2SoundQueue.clear();
         loop3SoundQueue.clear();
@@ -307,29 +291,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         loop1PauseQueue.clear();
         loop2PauseQueue.clear();
         loop3PauseQueue.clear();
-    }
-
-    public void setUpHoldDownButton(final Button soundButton, final int sound, final SoundPool sp) {
-        soundButton.setSoundEffectsEnabled(false);
-        soundButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        soundButton.setPressed(true);
-                        sp.play(sound, 1, 1, 0, 0, 1);
-                    }
-                    break;
-
-                    case MotionEvent.ACTION_UP: {
-                        sp.stop(sp.play(sound, 1, 1, 0, 0, 1));
-                        soundButton.setPressed(false);
-                    }
-                    break;
-                }
-                return true;
-            }
-        });
     }
 
     // Adds on load listeners to the looping sound pools
@@ -342,7 +303,6 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
             }
         });
     }
-
 
     public void runLoop1 () {
         final Handler handler1 = new Handler();

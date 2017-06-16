@@ -1,41 +1,29 @@
 package dubstepboard.okkhoury.com.edmpad;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-
 public class EDMFragment4 extends Fragment {
 
     // Set up the sound pools
     final SoundPool spNormal = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-//    final SoundPool spHold1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-//    final SoundPool spHold2 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-//    final SoundPool spHold3 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+
+    final SoundPool spHold1 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    final SoundPool spHold2 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    final SoundPool spHold3 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+    final SoundPool spHold4 = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -45,7 +33,6 @@ public class EDMFragment4 extends Fragment {
         // set up view and inflate the xml layout
         View v;   // = new View(getActivity());
         v = inflater.inflate(R.layout.fragment4_edm, parent, false);
-
 
         // Set up the buttons
         final Button soundButton1 = (Button) v.findViewById(R.id.soundButton1);
@@ -62,14 +49,11 @@ public class EDMFragment4 extends Fragment {
         final Button soundButton12 = (Button) v.findViewById(R.id.soundButton12);
 
         // set up the sounds
-//        final int sound1ID = spHold1.load(getActivity(), R.raw.roses1, 1);
-//        final int sound2ID = spHold2.load(getActivity(), R.raw.roses2, 1);
-//        final int sound3ID = spHold3.load(getActivity(), R.raw.roses3, 1);
+        final int sound1ID = spHold1.load(getActivity(), R.raw.roses1, 1);
+        final int sound2ID = spHold2.load(getActivity(), R.raw.roses2, 1);
+        final int sound3ID = spHold3.load(getActivity(), R.raw.roses3, 1);
+        final int sound4ID = spHold4.load(getActivity(), R.raw.roses4, 1);
 
-        final int sound1ID = spNormal.load(getActivity(), R.raw.roses1, 1);
-        final int sound2ID = spNormal.load(getActivity(), R.raw.roses2, 1);
-        final int sound3ID = spNormal.load(getActivity(), R.raw.roses3, 1);
-        final int sound4ID = spNormal.load(getActivity(), R.raw.roses4, 1);
         final int sound5ID = spNormal.load(getActivity(), R.raw.roses5, 1);
         final int sound6ID = spNormal.load(getActivity(), R.raw.roses6, 1);
         final int sound7ID = spNormal.load(getActivity(), R.raw.roses7, 1);
@@ -79,17 +63,13 @@ public class EDMFragment4 extends Fragment {
         final int sound11ID = spNormal.load(getActivity(), R.raw.roses11, 1);
         final int sound12ID = spNormal.load(getActivity(), R.raw.roses12, 1);
 
-
         // wire up the top button, which you hold down to play
-//        setUpHoldDownButton(soundButton1, sound1ID, spHold1);
-//        setUpHoldDownButton(soundButton2, sound2ID, spHold2);
-//        setUpHoldDownButton(soundButton3, sound3ID, spHold3);
+        setUpHoldDownButton(soundButton1, sound1ID, spHold1);
+        setUpHoldDownButton(soundButton2, sound2ID, spHold2);
+        setUpHoldDownButton(soundButton3, sound3ID, spHold3);
+        setUpHoldDownButton(soundButton4, sound4ID, spHold3);
 
-        // wire up the rest of the button, which you touch to play
-        setUpRegularButton(soundButton1, sound1ID, spNormal, R.raw.roses1);
-        setUpRegularButton(soundButton2, sound2ID, spNormal, R.raw.roses2);
-        setUpRegularButton(soundButton3, sound3ID, spNormal, R.raw.roses3);
-        setUpRegularButton(soundButton4, sound4ID, spNormal, R.raw.roses4);
+        // wire up the rest of the button, which you tap to play
         setUpRegularButton(soundButton5, sound5ID, spNormal, R.raw.roses5);
         setUpRegularButton(soundButton6, sound6ID, spNormal, R.raw.roses6);
         setUpRegularButton(soundButton7, sound7ID, spNormal, R.raw.roses7);
@@ -100,22 +80,6 @@ public class EDMFragment4 extends Fragment {
         setUpRegularButton(soundButton12, sound12ID, spNormal, R.raw.roses12);
 
         return v;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.sound_board_bar, menu);
-
-        // Set it so that the home button can't be used as a button
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getActivity().getActionBar().setHomeButtonEnabled(false);
-        }
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
-
-        // Set the action bar to black
-        getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-
     }
 
     public void setUpRegularButton(final Button soundButton, final int sound, final SoundPool sp, final int resID) {
@@ -141,40 +105,6 @@ public class EDMFragment4 extends Fragment {
         });
     }
 
-    public void moveToNewPreset (String preset) {
-        if (preset.equals("preset1")) {
-            Fragment fragment = new EDMFragment1();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset2")) {
-            Fragment fragment = new EDMFragment2();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset3")) {
-            Fragment fragment = new EDMFragment3();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset4")) {
-            Fragment fragment = new EDMFragment4();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        } else if (preset.equals("preset5")) {
-            Fragment fragment = new EDMFragment5();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-        }
-    }
-
     public void setUpHoldDownButton(final Button soundButton, final int sound, final SoundPool sp) {
         soundButton.setSoundEffectsEnabled(false);
         soundButton.setOnTouchListener(new View.OnTouchListener() {
@@ -194,17 +124,6 @@ public class EDMFragment4 extends Fragment {
                     break;
                 }
                 return true;
-            }
-        });
-    }
-
-    // Adds on load listeners to the looping sound pools
-    public void setUpLoopSP(SoundPool spLoop, final Queue<Integer> soundQueue) {
-        spLoop.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                soundQueue.add(sampleId);
-                //Log.d("hi owen", "Sound added");
             }
         });
     }
