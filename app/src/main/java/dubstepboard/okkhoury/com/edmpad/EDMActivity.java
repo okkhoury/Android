@@ -1,14 +1,21 @@
 package dubstepboard.okkhoury.com.edmpad;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,9 +23,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class EDMActivity extends FragmentActivity implements AdapterView.OnItemSelectedListener {
 
@@ -58,6 +74,15 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
     private boolean loop2IsOn = false;
     private boolean loop3IsOn = false;
 
+
+    //Recording
+    Button buttonStart, buttonStop, buttonPlayLastRecordAudio,
+            buttonResetRecording ;
+    String AudioSavePathInDevice = null;
+    MediaRecorder mediaRecorder ;
+    public static final int RequestPermissionCode = 1;
+    MediaPlayer mediaPlayer ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,12 +98,14 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         Spinner spinner = (Spinner) findViewById(R.id.spinner_dropdown);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.dropdown_list, android.R.layout.simple_spinner_item);
+                R.array.dropdown_list, R.layout.spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        spinner.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.white), PorterDuff.Mode.SRC_ATOP);
+
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
@@ -175,6 +202,114 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop3IsOn = false;
                     loop3SoundQueue.clear();
                     loop3PauseQueue.clear();
+                }
+            }
+        });
+
+        buttonStart = (Button) findViewById(R.id.startRecording);
+        buttonStop = (Button) findViewById(R.id.stopRecording);
+        buttonPlayLastRecordAudio = (Button) findViewById(R.id.playRecording);
+        buttonResetRecording = (Button)findViewById(R.id.stopPlayRecording);
+
+        buttonStop.setEnabled(false);
+        buttonPlayLastRecordAudio.setEnabled(false);
+        buttonResetRecording.setEnabled(false);
+
+        buttonStart.setVisibility(View.VISIBLE);
+        buttonStop.setVisibility(View.GONE);
+        buttonPlayLastRecordAudio.setVisibility(View.GONE);
+        buttonResetRecording.setVisibility(View.GONE);
+
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(checkPermission()) {
+
+                    AudioSavePathInDevice =
+                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +
+                                    CreateAudioFileName() + "AudioRecording.3gp";
+
+                    MediaRecorderReady();
+
+                    try {
+                        mediaRecorder.prepare();
+                        mediaRecorder.start();
+                    } catch (IllegalStateException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                    buttonStart.setEnabled(false);
+                    buttonStop.setEnabled(true);
+
+                    buttonStart.setVisibility(View.GONE);
+                    buttonStop.setVisibility(View.VISIBLE);
+
+                    //Toast.makeText(EDMActivity.this, "Recording started", Toast.LENGTH_LONG).show();
+                } else {
+                    requestPermission();
+                }
+
+            }
+        });
+
+        buttonStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaRecorder.stop();
+                buttonStop.setEnabled(false);
+                buttonPlayLastRecordAudio.setEnabled(true);
+                buttonResetRecording.setEnabled(true);
+                buttonStart.setEnabled(false);
+
+                buttonStop.setVisibility(View.GONE);
+                buttonPlayLastRecordAudio.setVisibility(View.VISIBLE);
+                buttonResetRecording.setVisibility(View.VISIBLE);
+
+                //Toast.makeText(EDMActivity.this, "Recording Completed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonPlayLastRecordAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) throws IllegalArgumentException,
+                    SecurityException, IllegalStateException {
+
+                buttonStop.setEnabled(false);
+                buttonStart.setEnabled(false);
+
+                mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource(AudioSavePathInDevice);
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mediaPlayer.start();
+                //Toast.makeText(EDMActivity.this, "Recording Playing", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonResetRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonStop.setEnabled(false);
+                buttonStart.setEnabled(true);
+                buttonPlayLastRecordAudio.setEnabled(false);
+
+                buttonPlayLastRecordAudio.setVisibility(View.GONE);
+                buttonResetRecording.setVisibility(View.GONE);
+                buttonStart.setVisibility(View.VISIBLE);
+
+                if(mediaPlayer != null){
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    MediaRecorderReady();
                 }
             }
         });
@@ -381,5 +516,56 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                 }
             }
         }, 0);
+    }
+
+    public void MediaRecorderReady(){
+        mediaRecorder=new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        mediaRecorder.setOutputFile(AudioSavePathInDevice);
+    }
+
+    public String CreateAudioFileName(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        Date date = new Date();
+        //Log.i("Date:", (dateFormat.format(date)).toString());
+        return (dateFormat.format(date)).toString();
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(EDMActivity.this, new
+                String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO}, RequestPermissionCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case RequestPermissionCode:
+                if (grantResults.length> 0) {
+                    boolean StoragePermission = grantResults[0] ==
+                            PackageManager.PERMISSION_GRANTED;
+                    boolean RecordPermission = grantResults[1] ==
+                            PackageManager.PERMISSION_GRANTED;
+
+                    if (StoragePermission && RecordPermission) {
+                        Toast.makeText(EDMActivity.this, "Permission Granted",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(EDMActivity.this,"Permission Denied",Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+        }
+    }
+
+    public boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),
+                WRITE_EXTERNAL_STORAGE);
+        int result1 = ContextCompat.checkSelfPermission(getApplicationContext(),
+                RECORD_AUDIO);
+        return result == PackageManager.PERMISSION_GRANTED &&
+                result1 == PackageManager.PERMISSION_GRANTED;
     }
 }

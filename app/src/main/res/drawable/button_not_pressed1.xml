@@ -7,8 +7,9 @@ android:id="@+id/button_pressed">
 
 <gradient
     android:angle="90"
-    android:endColor="#B0171F"
-    android:startColor="#00B2EE" />
+    android:startColor="#FFF94C"
+    android:centerColor="#6AE368"
+    android:endColor="#0047AB"  />
 
 <stroke
     android:width="3dp"

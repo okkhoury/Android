@@ -11,13 +11,13 @@
         android:layout_height="0dp"
         android:layout_weight="20"
         android:orientation="horizontal"
-        android:divider="?android:dividerVertical"
         android:showDividers="middle">
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="66">
+            android:layout_weight="64"
+            android:background="@color/black">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -25,36 +25,91 @@
                     android:id="@+id/spinner_dropdown"
                     android:layout_width="fill_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginBottom="10dp"/>
                 <Button
                     android:id="@+id/loop1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/spinner_dropdown"
                     android:layout_alignParentLeft="true"
-                    android:text="Loop 1" />
+                    android:background="@drawable/loop_button1"
+                    android:text="Loop 1"
+                    android:textColor="@color/white"/>
                 <Button
                     android:id="@+id/loop2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/spinner_dropdown"
+                    android:layout_marginTop="20dp"
                     android:layout_centerHorizontal="true"
-                    android:text="Loop 2" />
+                    android:background="@drawable/loop_button2"
+                    android:text="Loop 2"
+                    android:textColor="@color/white"/>
                 <Button
                     android:id="@+id/loop3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/spinner_dropdown"
                     android:layout_alignParentRight="true"
-                    android:text="Loop 3" />
+                    android:background="@drawable/loop_button3"
+                    android:text="Loop 3"
+                    android:textColor="@color/white"/>
             </RelativeLayout>
         </LinearLayout>
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="33">
-
+            android:layout_weight="36"
+            android:background="@color/black">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="Record"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    />
+                <Button
+                    android:id="@+id/startRecording"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/record_button" />
+                <Button
+                    android:id="@+id/stopRecording"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/stop_button" />
+                <Button
+                    android:id="@+id/playRecording"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    android:background="@mipmap/play_button" />
+                <Button
+                    android:id="@+id/stopPlayRecording"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
+                    android:background="@mipmap/restart_button" />
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>
