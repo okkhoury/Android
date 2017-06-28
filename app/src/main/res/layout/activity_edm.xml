@@ -25,14 +25,16 @@
                     android:id="@+id/spinner_dropdown"
                     android:layout_width="fill_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="20dp"/>
                 <Button
                     android:id="@+id/loop1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/spinner_dropdown"
                     android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="2dp"
                     android:background="@drawable/loop_button1"
+                    android:minWidth="72dip"
                     android:text="Loop 1"
                     android:textColor="@color/white"/>
                 <Button
@@ -40,9 +42,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/spinner_dropdown"
-                    android:layout_marginTop="20dp"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/loop_button2"
+                    android:minWidth="72dip"
                     android:text="Loop 2"
                     android:textColor="@color/white"/>
                 <Button
@@ -51,7 +53,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/spinner_dropdown"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="2dp"
                     android:background="@drawable/loop_button3"
+                    android:minWidth="72dip"
                     android:text="Loop 3"
                     android:textColor="@color/white"/>
             </RelativeLayout>

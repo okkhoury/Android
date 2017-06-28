@@ -100,7 +100,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.dropdown_list, R.layout.spinner_item);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -132,6 +132,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop1IsRecording = true;
                 } else if (loop1.getText().equals("Stop")) {
                     loop1.setText("End");
+                    loop1.setBackgroundResource(R.drawable.loop_button1_pressed);
                     Log.d("OWEN OWEN", loop1SoundQueue.toString());
                     Log.d("OWEN OWEN", loop1PauseQueue.toString());
                     // Add the time from last sound pressed to clicking stop
@@ -146,7 +147,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     runLoop1();
                 } else if (loop1.getText().equals("End")) {
                     loop1.setText("Loop 1");
-
+                    loop1.setBackgroundResource(R.drawable.loop_button1);
                     loop1IsOn = false;
                     loop1SoundQueue.clear();
                     loop1PauseQueue.clear();
@@ -163,7 +164,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop2IsRecording = true;
                 } else if (loop2.getText().equals("Stop")) {
                     loop2.setText("End");
-
+                    loop2.setBackgroundResource(R.drawable.loop_button2_pressed);
                     loop2IsOn = true;
                     loop2PauseQueue.add(System.currentTimeMillis() - loop2EndOfLastSound);
                     loop2PauseQueue.remove();
@@ -172,7 +173,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     runLoop2();
                 } else if (loop2.getText().equals("End")) {
                     loop2.setText("Loop 2");
-
+                    loop2.setBackgroundResource(R.drawable.loop_button2);
                     loop2IsOn = false;
                     loop2SoundQueue.clear();
                     loop2PauseQueue.clear();
@@ -189,7 +190,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     loop3IsRecording = true;
                 } else if (loop3.getText().equals("Stop")) {
                     loop3.setText("End");
-
+                    loop3.setBackgroundResource(R.drawable.loop_button3_pressed);
                     loop3IsOn = true;
                     loop3PauseQueue.add(System.currentTimeMillis() - loop3EndOfLastSound);
                     loop3PauseQueue.remove();
@@ -198,7 +199,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                     runLoop3();
                 } else if (loop3.getText().equals("End")) {
                     loop3.setText("Loop 3");
-
+                    loop3.setBackgroundResource(R.drawable.loop_button3);
                     loop3IsOn = false;
                     loop3SoundQueue.clear();
                     loop3PauseQueue.clear();
@@ -270,7 +271,7 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
                 buttonPlayLastRecordAudio.setVisibility(View.VISIBLE);
                 buttonResetRecording.setVisibility(View.VISIBLE);
 
-                //Toast.makeText(EDMActivity.this, "Recording Completed", Toast.LENGTH_LONG).show();
+                Toast.makeText(EDMActivity.this, "Recording Saved To Internal Storage \n [My Files -> Internal Storage]", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -324,27 +325,21 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
         Fragment fragment = null;
         switch (pos) {
             case 0:
-                releaseEverything();
                 fragment = new EDMFragment1(); // Gradient
                 break;
             case 1:
-                releaseEverything();
                 fragment = new EDMFragment2(); // Ethereal
                 break;
             case 2:
-                releaseEverything();
                 fragment = new EDMFragment3(); // AutoPilot
                 break;
             case 3:
-                releaseEverything();
                 fragment = new EDMFragment4(); // Dreamers
                 break;
             case 4:
-                releaseEverything();
                 fragment = new EDMFragment5(); // Roses
                 break;
             default:
-                releaseEverything();
                 fragment = new EDMFragment1(); // Ethereal
                 break;
         }
@@ -520,7 +515,9 @@ public class EDMActivity extends FragmentActivity implements AdapterView.OnItemS
 
     public void MediaRecorderReady(){
         mediaRecorder=new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
+        AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        am.setParameters("noise_suppression=auto");
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         mediaRecorder.setOutputFile(AudioSavePathInDevice);
