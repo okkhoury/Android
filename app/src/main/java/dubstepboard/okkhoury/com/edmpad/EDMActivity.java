@@ -30,7 +30,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Queue;
-import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import static android.Manifest.permission.RECORD_AUDIO;

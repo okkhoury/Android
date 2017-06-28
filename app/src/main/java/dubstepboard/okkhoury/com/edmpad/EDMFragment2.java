@@ -62,9 +62,9 @@ public class EDMFragment2 extends Fragment {
         final int sound12ID = spNormal.load(getActivity(), R.raw.gradient12, 1);
 
         // wire up the top button, which you hold down to play
-        setUpHoldDownButton(soundButton1, sound1ID, spHold1);
-        setUpHoldDownButton(soundButton2, sound2ID, spHold2);
-        setUpHoldDownButton(soundButton3, sound3ID, spHold3);
+        setUpHoldDownButton(soundButton1, sound1ID, spHold1, R.raw.ethereal1);
+        setUpHoldDownButton(soundButton2, sound2ID, spHold2, R.raw.ethereal2);
+        setUpHoldDownButton(soundButton3, sound3ID, spHold3, R.raw.ethereal3);
 
         // wire up the rest of the button, which you touch to play
         setUpRegularButton(soundButton4, sound4ID, spNormal, R.raw.ethereal4);
@@ -103,7 +103,7 @@ public class EDMFragment2 extends Fragment {
         });
     }
 
-    public void setUpHoldDownButton(final Button soundButton, final int sound, final SoundPool sp) {
+    public void setUpHoldDownButton(final Button soundButton, final int sound, final SoundPool sp, final int resID) {
         soundButton.setSoundEffectsEnabled(false);
         soundButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -112,6 +112,7 @@ public class EDMFragment2 extends Fragment {
                     case MotionEvent.ACTION_DOWN: {
                         soundButton.setPressed(true);
                         sp.play(sound, 1, 1, 0, 0, 1);
+                        EDMActivity.handleLoopingQueues(resID);
                     }
                     break;
 
